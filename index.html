@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Civilizational Capital & the Dual Power Structure</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0f;
+      --bg2:       #0f0f1a;
+      --bg3:       #141425;
+      --border:    rgba(180,150,80,0.18);
+      --gold:      #c9a84c;
+      --gold2:     #e8c97a;
+      --gold3:     #f5e0a0;
+      --text:      #e8e0d0;
+      --muted:     #8a8070;
+      --accent:    #4a7fa5;
+      --accent2:   #6eb3d4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem 6rem;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 100%, rgba(74,127,165,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 10% 50%, rgba(201,168,76,0.04) 0%, transparent 60%);
+      z-index: 0;
+    }
+
+    /* Decorative meridian lines */
+    .hero-lines {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .hero-lines svg {
+      width: 100%; height: 100%;
+      opacity: 0.06;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+    }
+
+    .eyebrow {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 300;
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.4s forwards;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold2);
+    }
+
+    .divider-ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem auto;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+    .divider-ornament span {
+      height: 1px;
+      width: 80px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .divider-ornament i {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      display: block;
+    }
+
+    .hero-desc {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.75s forwards;
+    }
+
+    /* ── QUIZ BUTTON ── */
+    .quiz-btn-wrap {
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.95s forwards;
+    }
+
+    .quiz-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 1.1rem 2.6rem;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold2);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      overflow: hidden;
+    }
+
+    .quiz-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.05));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .quiz-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+      transition: width 0.4s ease;
+    }
+
+    .quiz-btn:hover {
+      color: var(--gold3);
+      border-color: var(--gold2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(201,168,76,0.15), 0 0 0 1px rgba(201,168,76,0.1);
+    }
+
+    .quiz-btn:hover::before { opacity: 1; }
+    .quiz-btn:hover::after { width: 100%; }
+
+    .quiz-btn svg {
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .quiz-btn:hover svg { transform: translateX(4px); }
+
+    .quiz-btn-sub {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: none;
+      color: var(--muted);
+      margin-top: 0.75rem;
+    }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 2s forwards;
+    }
+    .scroll-hint span {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .scroll-hint .mouse {
+      width: 20px; height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      padding-top: 5px;
+    }
+    .scroll-hint .mouse::before {
+      content: '';
+      width: 3px; height: 7px;
+      background: var(--gold);
+      border-radius: 2px;
+      animation: scrollDot 2s ease infinite;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 2rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .section-title em { font-style: italic; color: var(--gold2); }
+
+    .section-body {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.8;
+    }
+
+    /* ── DUAL POWER GRID ── */
+    .dual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin: 4rem 0;
+      border: 1px solid var(--border);
+    }
+
+    .power-card {
+      padding: 2.5rem;
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+
+    .power-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+    }
+
+    .power-card.transact::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .power-card.civili::before  { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+
+    .power-card:hover { background: var(--bg3); }
+
+    .power-tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .power-card.transact .power-tag { color: var(--accent2); }
+    .power-card.civili .power-tag  { color: var(--gold2); }
+
+    .power-card h3 {
+      font-size: 1.5rem;
+      font-weight: 300;
+      margin-bottom: 0.8rem;
+    }
+
+    .power-card p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .power-card ul {
+      list-style: none;
+      margin-top: 1.2rem;
+    }
+    .power-card ul li {
+      font-size: 0.92rem;
+      color: var(--muted);
+      padding: 0.35rem 0;
+      padding-left: 1.2rem;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .power-card ul li:last-child { border-bottom: none; }
+    .power-card ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--border);
+    }
+
+    /* ── PROPOSITION BOX ── */
+    .proposition {
+      margin: 3rem 0;
+      padding: 2.5rem 3rem;
+      border-left: 3px solid var(--gold);
+      background: rgba(201,168,76,0.04);
+      position: relative;
+    }
+    .proposition::before {
+      content: '"';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem;
+      color: rgba(201,168,76,0.1);
+      position: absolute;
+      top: -1rem; left: 1rem;
+      line-height: 1;
+    }
+    .proposition p {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    /* ── CASE STUDIES ── */
+    .cases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5px;
+      margin: 3rem 0;
+      background: var(--border);
+    }
+
+    .case-card {
+      background: var(--bg2);
+      padding: 2rem;
+      transition: background 0.3s ease, transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .case-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top left, rgba(201,168,76,0.05), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .case-card:hover { background: var(--bg3); }
+    .case-card:hover::after { opacity: 1; }
+
+    .case-flag {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .case-card h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+
+    .case-card p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── THREE COMPONENTS ── */
+    .components {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin: 3rem 0;
+      background: var(--border);
+    }
+
+    .comp-card {
+      background: var(--bg2);
+      padding: 2rem 1.8rem;
+      text-align: center;
+      transition: background 0.3s ease;
+    }
+
+    .comp-card:hover { background: var(--bg3); }
+
+    .comp-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .comp-card h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .comp-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── KEYWORDS ── */
+    .keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2rem;
+    }
+
+    .keyword {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      transition: all 0.3s ease;
+    }
+
+    .keyword:hover {
+      border-color: var(--gold);
+      color: var(--gold2);
+    }
+
+    /* ── DIVIDER ── */
+    .hr-ornament {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 5rem 0;
+      opacity: 0.4;
+    }
+    .hr-ornament::before,
+    .hr-ornament::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .hr-ornament span {
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 0.3em;
+    }
+
+    /* ── BOTTOM CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 6rem 2rem 8rem;
+      background: linear-gradient(180deg, transparent 0%, rgba(201,168,76,0.03) 100%);
+    }
+
+    .cta-section h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      margin-bottom: 1.2rem;
+    }
+
+    .cta-section p {
+      color: var(--muted);
+      margin-bottom: 3rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.05rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-author {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-role {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: rgba(138,128,112,0.6);
+    }
+
+    .footer-divline {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 1.5rem auto;
+      opacity: 0.4;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes scrollDot {
+      0%   { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(12px); opacity: 0; }
+    }
+
+    /* Intersection observer reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .dual-grid { grid-template-columns: 1fr; }
+      .components { grid-template-columns: 1fr; }
+      .cases { grid-template-columns: 1fr; }
+      .proposition { padding: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines">
+    <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" fill="none" stroke="#c9a84c" stroke-width="0.5">
+      <!-- Globe meridians -->
+      <ellipse cx="600" cy="400" rx="500" ry="350"/>
+      <ellipse cx="600" cy="400" rx="300" ry="350"/>
+      <ellipse cx="600" cy="400" rx="150" ry="350"/>
+      <line x1="100" y1="400" x2="1100" y2="400"/>
+      <ellipse cx="600" cy="400" rx="500" ry="180"/>
+      <ellipse cx="600" cy="400" rx="500" ry="80"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="eyebrow">Geopolitical Framework · 21st Century</p>
+    <h1>
+      <em>Civilizational Capital</em><br>
+      and the Dual Power Structure<br>of the 21st Century
+    </h1>
+
+    <div class="divider-ornament">
+      <span></span><i></i><i style="opacity:.5"></i><span></span>
+    </div>
+
+    <p class="hero-desc">
+      A framework for understanding why some civilizations endure pressure, adapt, and rise — while others fragment. Exploring the interplay between transactional dominance and civilizational depth.
+    </p>
+
+    <div class="quiz-btn-wrap">
+      <a href="https://civilizational-capital-quiz.netlify.app/" target="_blank" rel="noopener" class="quiz-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Take the Interactive Quiz
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+      <span class="quiz-btn-sub">Test your understanding of civilizational power dynamics</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Explore</span>
+    <div class="mouse"></div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section style="border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Overview</p>
+      <h2 class="section-title">Beyond Economics<br>and Military Might</h2>
+      <p class="section-body">
+        Conventional frameworks — economic globalization, liberal institutionalism, military dominance — fail to explain why sanctioned economies persist, why regimes collapse despite wealth, and why global financial trust is shifting. This paper introduces <em style="color:var(--gold2);">Civilizational Capital</em> as the missing dimension.
+      </p>
+    </div>
+
+    <div class="hr-ornament reveal"><span>✦</span></div>
+
+    <!-- Three Components -->
+    <div class="reveal">
+      <p class="section-label">Core Components</p>
+      <h2 class="section-title">The Three Pillars of<br><em>Civilizational Capital</em></h2>
+    </div>
+
+    <div class="components reveal">
+      <div class="comp-card">
+        <span class="comp-icon">📜</span>
+        <h4>Knowledge Systems</h4>
+        <p>Philosophical traditions, scientific and medical heritage, ethical frameworks that form the intellectual backbone of a civilization.</p>
+      </div>
+      <div class="comp-card">
+        <span class="comp-icon">🤝</span>
+        <h4>Social Cohesion</h4>
+        <p>Shared identity across diversity, cultural continuity, and narrative stability that binds societies under prolonged pressure.</p>
+      </div>
+      <div class="comp-card">
+        <span class="comp-icon">🌐</span>
+        <h4>Diaspora Networks</h4>
+        <p>Global talent distribution, financial remittances, and soft power radiating outward from the civilizational core.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL POWER -->
+<section style="background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Theory</p>
+      <h2 class="section-title">The Dual Power<br><em>Structure</em></h2>
+      <p class="section-body">Global power operates across two parallel, interlocking systems — one visible and immediate, the other deep and generational.</p>
+    </div>
+
+    <div class="dual-grid reveal">
+      <div class="power-card transact">
+        <p class="power-tag">Transactional Power</p>
+        <h3>Short-Term. Visible.</h3>
+        <p>Economic and institutional dominance that determines immediate geopolitical outcomes.</p>
+        <ul>
+          <li>Financial systems & dollar dominance</li>
+          <li>Military alliances</li>
+          <li>Trade networks</li>
+          <li>Dominant actor: United States</li>
+        </ul>
+      </div>
+      <div class="power-card civili">
+        <p class="power-tag">Civilizational Power</p>
+        <h3>Long-Term. Structural.</h3>
+        <p>Cultural legitimacy and societal resilience that determines long-term survival and recovery.</p>
+        <ul>
+          <li>Identity & civilizational continuity</li>
+          <li>Cultural legitimacy</li>
+          <li>Internal societal resilience</li>
+          <li>Strong examples: India, Iran, China</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proposition reveal">
+      <p>Transactional power determines short-term outcomes. Civilizational power determines long-term survival and recovery.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Case Studies</p>
+      <h2 class="section-title">The Framework<br><em>in Practice</em></h2>
+    </div>
+
+    <div class="cases reveal">
+      <div class="case-card">
+        <span class="case-flag">🕌</span>
+        <h4>Iran vs. Iraq</h4>
+        <p>Iraq collapsed rapidly after external intervention. Iran has sustained decades of severe sanctions — its Persian civilizational identity providing structural resilience Iraq lacked.</p>
+      </div>
+      <div class="case-card">
+        <span class="case-flag">🐉</span>
+        <h4>China's Economic Rise</h4>
+        <p>China achieved export dominance yet lacks reserve currency status. Transactional success does not automatically translate into trust-based financial leadership.</p>
+      </div>
+      <div class="case-card">
+        <span class="case-flag">🪷</span>
+        <h4>India's Emerging Position</h4>
+        <p>India represents a hybrid model — combining profound civilizational depth with an expanding global diaspora and increasing transactional capacity. A pivotal 21st-century actor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label" style="text-align:center;">Interactive</p>
+      <h2>Test Your Understanding</h2>
+      <p>Explore these ideas through an interactive quiz — map civilizational forces, assess power dynamics, and reflect on the world's shifting order.</p>
+
+      <a href="https://civilizational-capital-quiz.netlify.app/" target="_blank" rel="noopener" class="quiz-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        Launch the Interactive Quiz
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+      <div class="keywords" style="justify-content:center; margin-top:3rem;">
+        <span class="keyword">Civilizational Capital</span>
+        <span class="keyword">Multipolarity</span>
+        <span class="keyword">Geopolitics</span>
+        <span class="keyword">Global Trust</span>
+        <span class="keyword">India</span>
+        <span class="keyword">Iran</span>
+        <span class="keyword">China</span>
+        <span class="keyword">USA</span>
+        <span class="keyword">Dual Power Theory</span>
+        <span class="keyword">IR Theory</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Civilizational Capital</div>
+    <div class="footer-divline"></div>
+    <p class="footer-author">Created by Kallol Chakrabarti</p>
+    <p class="footer-role">Global Independent Researcher</p>
+    <div class="footer-divline" style="margin-top:1.5rem;"></div>
+    <p style="font-family:'Syne',sans-serif;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(138,128,112,0.35);margin-top:1.2rem;">
+      Civilizational Capital &amp; the Dual Power Structure of the 21st Century
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for reveal animations
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
